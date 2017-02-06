@@ -1,10 +1,14 @@
 package sk.vrto;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sk.vrto.precondition.Precondition.SampleFailingPrecondition;
+import sk.vrto.precondition.Precondition.SamplePassingPrecondition;
+import sk.vrto.precondition.PreconditionsAction;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -33,6 +37,15 @@ class SampleController {
     @RequestMapping(value = "/service-conflict", method = GET)
     public void causeConflictInServiceLayer() {
         service.performCrashingCommand();
+    }
+
+    @RequestMapping(value = "/preconditions", method = GET)
+    public ResponseEntity<?> preconditionVetoedAccess() {
+        return new PreconditionsAction()
+                .addPrecondition(new SamplePassingPrecondition())
+                .addPrecondition(new SampleFailingPrecondition())
+                .whenAllPreconditionsMatch(() -> ResponseEntity.ok("Hooray"))
+                .call();
     }
 
 }

@@ -79,4 +79,13 @@ public class SpringBootErrorHandlingApplicationTests {
             .body("status", equalTo("Conflict"))
             .body("message", equalTo("Some important message from service layer"));
     }
+
+    @Test
+    public void shouldVetoAccessViaPrecondition() {
+        get("/preconditions").then()
+            .statusCode(NOT_FOUND.value())
+            .body("code", equalTo(404))
+            .body("status", equalTo("Not-Found"))
+            .body("message", equalTo("Precondition failed, because something was not found."));
+    }
 }
