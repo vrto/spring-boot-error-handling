@@ -14,19 +14,19 @@ public class JsonError {
     String status;
     String message;
 
-    static JsonError internalServerError(String message) {
+    public static JsonError internalServerError(String message) {
         return new JsonError(INTERNAL_SERVER_ERROR.value(), "Internal-Server-Error", message);
     }
 
-    static JsonError notFound(String message) {
+    public static JsonError notFound(String message) {
         return new JsonError(NOT_FOUND.value(), "Not-Found", message);
     }
 
-    static JsonError badRequest(String message) {
+    public static JsonError badRequest(String message) {
         return new JsonError(BAD_REQUEST.value(), "Bad-Request", message);
     }
 
-    static JsonError conflict(String message) {
+    public static JsonError conflict(String message) {
         return new JsonError(CONFLICT.value(), "Conflict", message);
     }
 }

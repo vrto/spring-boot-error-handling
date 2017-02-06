@@ -10,8 +10,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import sk.vrto.exception.web.AuthorizationException;
-import sk.vrto.exception.web.ConflictException;
-import sk.vrto.exception.web.NotFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -42,17 +40,6 @@ class ErrorHandler {
 
     @ExceptionHandler(AuthorizationException.class)
     ResponseEntity<JsonError> appThrownExceptions(AuthorizationException exception) {
-        // handling for all 402/403/404/409 ...
-        if (exception instanceof NotFoundException) {
-            return new ResponseEntity<>(
-                    JsonError.notFound(exception.getMessage()),
-                    exception.getHttpStatus());
-        }
-        if (exception instanceof ConflictException) {
-            return new ResponseEntity<JsonError>(
-                    JsonError.conflict(exception.getMessage()),
-                    exception.getHttpStatus());
-        }
-        throw new IllegalStateException("Unsupported AuthorizationException type");
+        return new ResponseEntity<>(exception.createErrorBody(), exception.getHttpStatus());
     }
 }
