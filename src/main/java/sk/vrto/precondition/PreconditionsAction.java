@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class PreconditionsAction {
@@ -26,6 +27,10 @@ public class PreconditionsAction {
     public ResponseEntity<?> call() {
         val firstFailure = verifyAll();
         return firstFailure.orElseGet(resultSupplier);
+    }
+
+    public CompletableFuture<ResponseEntity<?>> callNonBlocking() {
+        return CompletableFuture.supplyAsync(this::call);
     }
 
     private Optional<ResponseEntity> verifyAll() {

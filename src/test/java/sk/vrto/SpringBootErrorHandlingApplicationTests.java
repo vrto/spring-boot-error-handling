@@ -1,7 +1,9 @@
 package sk.vrto;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.builder.ResponseSpecBuilder;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.specification.ResponseSpecification;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,10 +84,20 @@ public class SpringBootErrorHandlingApplicationTests {
 
     @Test
     public void shouldVetoAccessViaPrecondition() {
-        get("/preconditions").then()
-            .statusCode(NOT_FOUND.value())
-            .body("code", equalTo(404))
-            .body("status", equalTo("Not-Found"))
-            .body("message", equalTo("Precondition failed, because something was not found."));
+        get("/preconditions").then().spec(preconditionFailure());
+    }
+
+    @Test
+    public void shouldVetoAccessViaPrecondition_NonBlocking() {
+        get("/preconditions/non-blocking").then().spec(preconditionFailure());
+    }
+
+    private ResponseSpecification preconditionFailure() {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(NOT_FOUND.value())
+                .expectBody("code", equalTo(404))
+                .expectBody("status", equalTo("Not-Found"))
+                .expectBody("message", equalTo("Precondition failed, because something was not found."))
+                .build();
     }
 }

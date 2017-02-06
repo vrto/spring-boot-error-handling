@@ -10,6 +10,8 @@ import sk.vrto.precondition.Precondition.SampleFailingPrecondition;
 import sk.vrto.precondition.Precondition.SamplePassingPrecondition;
 import sk.vrto.precondition.PreconditionsAction;
 
+import java.util.concurrent.CompletableFuture;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -46,6 +48,15 @@ class SampleController {
                 .addPrecondition(new SampleFailingPrecondition())
                 .whenAllPreconditionsMatch(() -> ResponseEntity.ok("Hooray"))
                 .call();
+    }
+
+    @RequestMapping(value = "/preconditions/non-blocking", method = GET)
+    public CompletableFuture<ResponseEntity<?>> preconditionVetoedAccessNonBlocking() {
+        return new PreconditionsAction()
+                .addPrecondition(new SamplePassingPrecondition())
+                .addPrecondition(new SampleFailingPrecondition())
+                .whenAllPreconditionsMatch(() -> ResponseEntity.ok("Hooray"))
+                .callNonBlocking();
     }
 
 }
