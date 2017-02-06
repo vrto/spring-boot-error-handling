@@ -1,7 +1,7 @@
 package sk.vrto;
 
 import org.springframework.stereotype.Component;
-import sk.vrto.exception.NotFoundException;
+import sk.vrto.exception.web.NotFoundException;
 
 import java.util.Map;
 

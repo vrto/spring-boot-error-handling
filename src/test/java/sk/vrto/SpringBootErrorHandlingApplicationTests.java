@@ -13,6 +13,7 @@ import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -68,5 +69,14 @@ public class SpringBootErrorHandlingApplicationTests {
             .body("code", equalTo(404))
             .body("status", equalTo("Not-Found"))
             .body("message", equalTo("Unknown company: 1"));
+    }
+
+    @Test
+    public void shouldReportConflict_CausedByServiceLayer() {
+        get("/service-conflict").then()
+            .statusCode(CONFLICT.value())
+            .body("code", equalTo(409))
+            .body("status", equalTo("Conflict"))
+            .body("message", equalTo("Some important message from service layer"));
     }
 }

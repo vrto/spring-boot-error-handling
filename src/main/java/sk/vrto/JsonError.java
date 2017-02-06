@@ -3,6 +3,7 @@ package sk.vrto;
 import lombok.Value;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -23,5 +24,9 @@ public class JsonError {
 
     static JsonError badRequest(String message) {
         return new JsonError(BAD_REQUEST.value(), "Bad-Request", message);
+    }
+
+    static JsonError conflict(String message) {
+        return new JsonError(CONFLICT.value(), "Conflict", message);
     }
 }
