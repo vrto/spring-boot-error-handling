@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.projectlombok:lombok:1.16.12')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('com.jayway.restassured:rest-assured:2.9.0')

@@ -60,4 +60,13 @@ public class SpringBootErrorHandlingApplicationTests {
             .body("message", equalTo("Failure parsing request body!"));
 
     }
+
+    @Test
+    public void shouldVetoAccessViaGuardian() {
+        get("/1/protected").then()
+            .statusCode(NOT_FOUND.value())
+            .body("code", equalTo(404))
+            .body("status", equalTo("Not-Found"))
+            .body("message", equalTo("Unknown company: 1"));
+    }
 }

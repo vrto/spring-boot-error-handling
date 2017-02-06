@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import sk.vrto.exception.AuthorizationException;
+import sk.vrto.exception.NotFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -35,5 +37,15 @@ class ErrorHandler {
         return new ResponseEntity<>(
                 JsonError.badRequest("Failure parsing request body!"),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    ResponseEntity<JsonError> appThrownExceptions(AuthorizationException exception) {
+        if (exception instanceof NotFoundException) {
+            return new ResponseEntity<>(
+                    JsonError.notFound(exception.getMessage()),
+                    HttpStatus.NOT_FOUND);
+        }
+        throw new IllegalStateException("Unsupported AuthorizationException type");
     }
 }
