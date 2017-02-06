@@ -9,7 +9,8 @@ import java.util.Map;
 public class CompanyGuardian extends UrlParameterGuardian {
     @Override
     protected void checkUrlVariables(Map<String, Object> parameters) {
-        if (parameters.containsKey("companyId"))
+        if (parameters.containsKey("companyId")) {
             throw new NotFoundException("Unknown company: " + parameters.get("companyId"));
+        }
     }
 }
